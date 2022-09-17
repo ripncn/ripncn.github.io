@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "宝塔面板一键docker部署 by pch18"
-categories: linux
+categories: docker
 tags: baota docker bt-panel
 author: Ripncn
 ---
