@@ -16,7 +16,7 @@ Ripncn -- 一个网虫（老的）
 ## 联系我
 
 * GitHub：[Ripncn](https://github.com/ripncn)
-* email：<support@0520.eu.org>
+* Email：<support@0520.eu.org>
 * 
 * 
 * 
