@@ -25,7 +25,7 @@ Ripncn -- 一个网虫（老的）
 
 ## 友情链接
 
-[枫铃网络](https://www.lovou.pw) \| [枫铃网](http://lovou.pw) \| [枫铃博客](https://blog.lovou.pw) \|
+[枫铃网络](https://www.lovou.pw) \| [枫铃网](http://lovou.pw) \| [枫铃博客](https://blog.lovou.pw) \| [Free社区](http://free.lovou.pw/bbs) \|
 
 ## Comments
 
