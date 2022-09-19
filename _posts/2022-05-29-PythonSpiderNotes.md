@@ -9,13 +9,13 @@ tags: python spider
 * content
 {:toc}
 
-Python学习网络爬虫主要分3个大的版块：抓取，分析，存储
+# Python学习网络爬虫主要分3个大的版块：抓取，分析，存储
 
 另外，比较常用的爬虫框架Scrapy，这里最后也详细介绍一下。
 
 首先列举一下本人总结的相关文章，这些覆盖了入门网络爬虫需要的基本概念和技巧：宁哥的小站-网络爬虫
 
-当我们在浏览器中输入一个url后回车，后台会发生什么？比如说你输入http://lovou.pw/，你就会看到小站首页。
+当我们在浏览器中输入一个url后回车，后台会发生什么？比如说你输入<http://lovou.pw/>，你就会看到小站首页。
 
 简单来说这段过程发生了以下四个步骤：
 
@@ -27,13 +27,17 @@ Python学习网络爬虫主要分3个大的版块：抓取，分析，存储
 网络爬虫要做的，简单来说，就是实现浏览器的功能。通过指定url，直接返回给用户所需要的数据，而不需要一步步人工去操纵浏览器获取。
 抓取
 
+
+
+
+
 这一步，你要明确要得到的内容是什么？是HTML源码，还是Json格式的字符串等。
-1. 最基本的抓取
+* 最基本的抓取
 
 抓取大多数情况属于get请求，即直接从对方服务器上获取数据。
 
 首先，Python中自带urllib及urllib2这两个模块，基本上能满足一般的页面抓取。另外，requests也是非常有用的包，与此类似的，还有httplib2等等。
-
+```
 Requests：
 	import requests
 	response = requests.get(url)
@@ -52,9 +56,9 @@ Httplib2：
 	response_headers, content = http.request(url, 'GET')
 	print "response headers:", response_headers
 	print "content:", content
-
+```
 此外，对于带有查询字段的url，get请求一般会将来请求的数据附在url之后，以?分割url和传输数据，多个参数用&连接。
-
+```
 data = {'data1':'XXXXX', 'data2':'XXXXX'}
 Requests：data为dict，json
 	import requests
@@ -64,16 +68,16 @@ Urllib2：data为string
 	data = urllib.urlencode(data)
 	full_url = url+'?'+data
 	response = urllib2.urlopen(full_url)
-
+```
 相关参考：网易新闻排行榜抓取回顾
 
 参考项目：网络爬虫之最基本的爬虫：爬取网易新闻排行榜
-2. 对于登陆情况的处理
+* 对于登陆情况的处理
 
-2.1 使用表单登陆
+** 使用表单登陆
 
 这种情况属于post请求，即先向服务器发送表单数据，服务器再将返回的cookie存入本地。
-
+```
 data = {'data1':'XXXXX', 'data2':'XXXXX'}
 Requests：data为dict，json
 	import requests
@@ -83,33 +87,33 @@ Urllib2：data为string
 	data = urllib.urlencode(data)
 	req = urllib2.Request(url=url, data=data)
 	response = urllib2.urlopen(req)
-
-2.2 使用cookie登陆
+```
+** 使用cookie登陆
 
 使用cookie登陆，服务器会认为你是一个已登陆的用户，所以就会返回给你一个已登陆的内容。因此，需要验证码的情况可以使用带验证码登陆的cookie解决。
-
+```
 import requests			
 requests_session = requests.session() 
 response = requests_session.post(url=url_login, data=data) 
-
+```
 若存在验证码，此时采用response = requests_session.post(url=url_login, data=data)是不行的，做法应该如下：
-
+```
 response_captcha = requests_session.get(url=url_login, cookies=cookies)
 response1 = requests.get(url_login) # 未登陆
 response2 = requests_session.get(url_login) # 已登陆，因为之前拿到了Response Cookie！
 response3 = requests_session.get(url_results) # 已登陆，因为之前拿到了Response Cookie！
-
+```
 相关参考：网络爬虫-验证码登陆
 
 参考项目：网络爬虫之用户名密码及验证码登陆：爬取知乎网站
-3. 对于反爬虫机制的处理
+* 对于反爬虫机制的处理
 
-3.1 使用代理
+** 使用代理
 
 适用情况：限制IP地址情况，也可解决由于“频繁点击”而需要输入验证码登陆的情况。
 
 这种情况最好的办法就是维护一个代理IP池，网上有很多免费的代理IP，良莠不齐，可以通过筛选找到能用的。对于“频繁点击”的情况，我们还可以通过限制爬虫访问网站的频率来避免被网站禁掉。
-
+```
 proxies = {'http':'http://XX.XX.XX.XX:XXXX'}
 Requests：
 	import requests
@@ -120,20 +124,20 @@ Urllib2：
 	opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler)
 	urllib2.install_opener(opener) # 安装opener，此后调用urlopen()时都会使用安装过的opener对象
 	response = urllib2.urlopen(url)
-
-3.2 时间设置
+```
+** 时间设置
 
 适用情况：限制频率情况。
 
 Requests，Urllib2都可以使用time库的sleep()函数：
-
+```
 import time
 time.sleep(1)
-
-3.3 伪装成浏览器，或者反“反盗链”
+```
+** 伪装成浏览器，或者反“反盗链”
 
 有些网站会检查你是不是真的浏览器访问，还是机器自动访问的。这种情况，加上User-Agent，表明你是浏览器访问即可。有时还会检查是否带Referer信息还会检查你的Referer是否合法，一般再加上Referer。
-
+```
 headers = {'User-Agent':'XXXXX'} # 伪装成浏览器访问，适用于拒绝爬虫的网站
 headers = {'Referer':'XXXXX'}
 headers = {'User-Agent':'XXXXX', 'Referer':'XXXXX'}
@@ -143,11 +147,11 @@ Urllib2：
 	import urllib, urllib2   
 	req = urllib2.Request(url=url, headers=headers)
 	response = urllib2.urlopen(req)
-
-4. 对于断线重连
+```
+* 对于断线重连
 
 不多说。
-
+```
 def multi_session(session, *arg):
 	retryTimes = 20
 	while retryTimes>0:
@@ -167,14 +171,14 @@ def multi_open(opener, *arg):
 		except:
 			print '.',
 			retryTimes -= 1
-
+```
 这样我们就可以使用multi_session或multi_open对爬虫抓取的session或opener进行保持。
-5. 多进程抓取
+* 多进程抓取
 
 这里针对华尔街见闻进行并行抓取的实验对比：Python多进程抓取 与 Java单线程和多线程抓取
 
 相关参考：关于Python和Java的多进程多线程计算方法对比
-6. 对于Ajax请求的处理
+* 对于Ajax请求的处理
 
 对于“加载更多”情况，使用Ajax来传输很多数据。
 
@@ -185,20 +189,20 @@ def multi_open(opener, *arg):
     如果“请求”之前有页面，依据上一步的网址进行分析推导第1页。以此类推，抓取抓Ajax地址的数据。
     对返回的json格式数据(str)进行正则匹配。json格式数据中，需从'\uxxxx'形式的unicode_escape编码转换成u'\uxxxx'的unicode编码。
 
-7. 自动化测试工具Selenium
+* 自动化测试工具Selenium
 
 Selenium是一款自动化测试工具。它能实现操纵浏览器，包括字符填充、鼠标点击、获取元素、页面切换等一系列操作。总之，凡是浏览器能做的事，Selenium都能够做到。
 
 这里列出在给定城市列表后，使用selenium来动态抓取去哪儿网的票价信息的代码。
 
 参考项目：网络爬虫之Selenium使用代理登陆：爬取去哪儿网站
-8. 验证码识别
+* 验证码识别
 
 对于网站有验证码的情况，我们有三种办法：
 
-    使用代理，更新IP。
-    使用cookie登陆。
-    验证码识别。
+   >使用代理，更新IP。
+   >使用cookie登陆。
+   >验证码识别。
 
 使用代理和使用cookie登陆之前已经讲过，下面讲一下验证码识别。
 
@@ -208,8 +212,8 @@ Selenium是一款自动化测试工具。它能实现操纵浏览器，包括字
 
 爬取有两个需要注意的问题：
 
-    如何监控一系列网站的更新情况，也就是说，如何进行增量式爬取？
-    对于海量数据，如何实现分布式爬取？
+    >如何监控一系列网站的更新情况，也就是说，如何进行增量式爬取？
+    >对于海量数据，如何实现分布式爬取？
 
 分析
 
@@ -224,8 +228,8 @@ Selenium是一款自动化测试工具。它能实现操纵浏览器，包括字
 
 存储有两个需要注意的问题：
 
-    如何进行网页去重？
-    内容以什么形式存储？
+    >如何进行网页去重？
+    >内容以什么形式存储？
 
 Scrapy
 
@@ -247,7 +251,7 @@ Allow: 指定允许访问的网址
 
 注意: 一个英文要大写，冒号是英文状态下，冒号后面有一个空格，"/"代表整个网站
 2. Robots协议举例
-
+```
 禁止所有机器人访问
 	User-agent: *
 	Disallow: /
@@ -274,3 +278,4 @@ Allow: 指定允许访问的网址
 	User-agent: *
 	Allow: /*.html$
 	Disallow: /
+```
