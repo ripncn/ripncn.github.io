@@ -1,3 +1,4 @@
+
 #!/usr/bin/bash
 #
 #           CasaOS Installer Script
@@ -31,7 +32,7 @@ echo '
  | |___| (_| \__ \ (_| | |__| |____) |
   \_____\__,_|___/\__,_|\____/|_____/ 
                                       
-   --- 机顶盒适配脚本 lovou.eu.org ---
+   --- Made by IceWhale with Lovou ---
 '
 export PATH=/usr/sbin:$PATH
 set -e
@@ -73,7 +74,7 @@ UNAME_U="$(uname -s)"
 readonly UNAME_U
 
 readonly CASA_CONF_PATH=/etc/casaos/gateway.ini
-readonly CASA_UNINSTALL_URL="https://raw.githubusercontent.com/IceWhaleTech/get/main/uninstall.sh"
+readonly CASA_UNINSTALL_URL="https://hub.lovou.eu.org/https://raw.githubusercontent.com/IceWhaleTech/get/main/uninstall.sh"
 readonly CASA_UNINSTALL_PATH=/usr/bin/casaos-uninstall
 
 # REQUIREMENTS CONF PATH
