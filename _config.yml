@@ -7,7 +7,7 @@
 
 # Site settings
 title: Ripncn's Blog
-brief-intro: Front-end Dev Engineer
+brief-intro: https://lovou.eu.org
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ripncn.github.io" # the base hostname & protocol for your site
 
