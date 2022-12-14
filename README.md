@@ -1,4 +1,4 @@
-# Ripncn 
+# Ripncn's Blog 
   -- <https://lovou.eu.org>
 
 ### 记录学习过程中遇到的问题,解决的思路。
