@@ -16,8 +16,8 @@ author: Ripncn
 Github License Github Release NPM version Required Hexo version Node.js Version jsDelivr hits
 
 ## star2 在线预览
-> XPoet's Blog
-> keep 演示网站
+1. XPoet's Blog
+2. keep 演示网站
 如果你想把自己的博客链接放在在线预览列表里，可以给作者提 PR 。
 
 ## rocket 安装
